@@ -1,4 +1,5 @@
-const { app, BrowserWindow } = require('electron');
+const fs = require('fs');
+const { app, BrowserWindow, dialog } = require('electron');
 
 // Declare main window in global scope so it doesn't get garbage collected
 let mainWindow = null;
@@ -7,9 +8,31 @@ let mainWindow = null;
 app.on('ready', () => {
     mainWindow = new BrowserWindow({ width: 800, height: 800, show: false });
     mainWindow.loadFile(`${__dirname}/index.html`);
+
+    getFileFromUser();
+
     mainWindow.once('ready-to-show', () => {
         mainWindow.show();
     });
 });
 
-console.log('Starting up...');
+const getFileFromUser = () => {
+    // Use a native dialog to open a file
+    const files = dialog.showOpenDialog({
+        properties: ['openFile'],
+        buttonLabel: 'Unveil',
+        title: 'Open Firesale Document',
+        filters: [
+            { name: 'Markdown Files', extensions: ['md', 'mdown', 'markdown'] },
+            { name: 'Text Files', extensions: ['txt', 'text'] },
+        ],
+    });
+
+    // If the user cancels the dialog, then files will be undefined
+    if (!files) return;
+
+    // Show the contents of the file in the console
+    const [file] = files;
+    const content = fs.readFileSync(file, { encoding: 'utf-8' });
+    console.log(content);
+};
