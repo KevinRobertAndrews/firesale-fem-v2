@@ -9,14 +9,12 @@ app.on('ready', () => {
     mainWindow = new BrowserWindow({ width: 800, height: 800, show: false });
     mainWindow.loadFile(`${__dirname}/index.html`);
 
-    getFileFromUser();
-
     mainWindow.once('ready-to-show', () => {
         mainWindow.show();
     });
 });
 
-const getFileFromUser = () => {
+exports.getFileFromUser = () => {
     // Use a native dialog to open a file
     const files = dialog.showOpenDialog({
         properties: ['openFile'],
@@ -33,6 +31,10 @@ const getFileFromUser = () => {
 
     // Show the contents of the file in the console
     const [file] = files;
+    openFile(file);
+};
+
+const openFile = (file) => {
     const content = fs.readFileSync(file, { encoding: 'utf-8' });
-    console.log(content);
+    mainWindow.webContents.send('file-opened', file, content);
 };
