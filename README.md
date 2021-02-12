@@ -1,5 +1,9 @@
 # Fire Sale
 
+This is my course work for Electron Fundamentals, v2 by Steve Kinney.
+https://frontendmasters.com/courses/electron-v2
+
+
 Completed code from [Electron in Action](http://bit.ly/electronjs).
 
 - [Code from the end of Chapter 3](https://github.com/electron-in-action/firesale/tree/chapter-3)
